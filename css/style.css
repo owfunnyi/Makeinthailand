@@ -1,0 +1,472 @@
+/* style.css */
+body {
+    font-family: 'Prompt', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    background-color: #f5f5f5;
+}
+
+/* พื้นหลัง GIF */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://i.pinimg.com/originals/e4/26/70/e426702edf874b181aced1e2fa5c6cde.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 35px;
+    width: 450px;
+    max-width: 90%;
+    margin: 30px 0;
+    transition: all 0.3s ease;
+}
+
+.register-container {
+    width: 500px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 28px;
+}
+
+.subtitle {
+    color: #666;
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.icon {
+    margin-right: 6px;
+    color: #4CAF50;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    font-family: 'Prompt', sans-serif;
+}
+
+input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.password-toggle {
+    position: relative;
+}
+
+.toggle-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s ease;
+}
+
+.toggle-icon:hover {
+    color: #4CAF50;
+}
+
+.password-strength-container {
+    height: 5px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.password-strength {
+    height: 100%;
+    width: 0;
+    border-radius: 3px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength-text {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.password-requirements {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #666;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.password-requirements ul {
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.password-requirements li {
+    margin-bottom: 3px;
+    list-style-type: none;
+    position: relative;
+}
+
+.password-requirements li i {
+    font-size: 8px;
+    margin-right: 5px;
+    color: #ccc;
+}
+
+.password-requirements li.valid i {
+    color: #4CAF50;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.checkbox-group input {
+    margin-right: 10px;
+    margin-top: 3px;
+}
+
+.checkbox-group label {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #555;
+}
+
+button {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Prompt', sans-serif;
+}
+
+button i {
+    margin-right: 8px;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #45a049, #3d8b3d);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    color: #f44336;
+    font-size: 13px;
+    margin-top: 5px;
+    display: none;
+}
+
+.link-container {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 15px;
+    color: #555;
+}
+
+.link-container a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.link-container a:hover {
+    color: #45a049;
+    text-decoration: underline;
+}
+
+/* เพิ่มเอฟเฟกต์เรืองแสงให้กับ container */
+@keyframes glow {
+    0% {
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
+    }
+    100% {
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    }
+}
+
+.container {
+    animation: glow 4s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+    .container {
+        padding: 25px;
+        margin: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"] {
+        padding: 10px 12px;
+    }
+    
+    button {
+        padding: 12px;
+    }
+    
+    .password-requirements {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
+
+/* สไตล์สำหรับหน้าล็อกอิน */
+.login-container {
+    width: 420px;
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.forgot-password a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.forgot-password a:hover {
+    color: #45a049;
+    text-decoration: underline;
+}
+
+.divider {
+    text-align: center;
+    margin: 25px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.divider span {
+    background-color: white;
+    padding: 0 15px;
+    position: relative;
+    color: #777;
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Prompt', sans-serif;
+}
+
+.btn-social i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.btn-google {
+    background-color: #DB4437;
+}
+
+.btn-google:hover {
+    background-color: #c53929;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-facebook {
+    background-color: #4267B2;
+}
+
+.btn-facebook:hover {
+    background-color: #365899;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* เพิ่มเอฟเฟกต์เคลื่อนไหวเมื่อโหลดหน้า */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ปรับแต่งปุ่มล็อกอิน */
+.btn-login {
+    background: linear-gradient(45deg, #4CAF50, #2E7D32);
+}
+
+.btn-login:hover {
+    background: linear-gradient(45deg, #2E7D32, #1B5E20);
+}
+
+/* ปรับแต่งเพิ่มเติมสำหรับ checkbox */
+.checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #4CAF50;
+}
+
+/* ปรับแต่งสำหรับหน้าจอมือถือ */
+@media (max-width: 576px) {
+    .login-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .forgot-password {
+        align-self: flex-end;
+    }
+    
+    .social-login {
+        gap: 10px;
+    }
+    
+    .btn-social {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* เพิ่มเอฟเฟกต์ hover สำหรับ input */
+input:hover {
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+/* เพิ่มเอฟเฟกต์เมื่อเกิดข้อผิดพลาด */
+input.error {
+    border-color: #f44336;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2);
+}
+
+/* เพิ่มเอฟเฟกต์สำหรับปุ่มเมื่อกด */
+button:active {
+    transform: scale(0.98);
+}

@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>โครตเข้าเส้น เล่นเข้าเนื้อ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        /* วิดีโอพื้นหลัง */
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* ปรับความเข้มของสีพื้นหลังที่ทับวิดีโอ */
+            z-index: -1;
+        }
+        
+        .header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .site-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            
+        }
+        
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+        
+        .btn-login {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 3px 6px rgba(76, 175, 80, 0.2);
+        }
+        
+        .btn-login:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-register {
+            background-color: white;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-register:hover {
+            background-color: #f9f9f9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-section {
+            margin-top: 0;
+            padding: 120px 30px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            min-height: 100vh;
+            color: white; /* เปลี่ยนสีข้อให้เห็นชัดบนพื้นหลังวิดีโออออ */
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            animation: scaleIn 0.8s ease-out 0.3s both;
+            border: 3px solid white;
+        }
+        
+        .hero-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            animation: slideUp 0.8s ease-out 0.5s both;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .hero-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            animation: slideUp 0.8s ease-out 0.7s both;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            animation: slideUp 0.8s ease-out 0.9s both;
+        }
+        
+        .hero-btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .hero-btn-login {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-btn-login:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .hero-btn-register {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero-btn-register:hover {
+            background-color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .features-section {
+            padding: 60px 30px;
+            background-color: white;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 50px;
+        }
+        
+        .features-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            margin-top: auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .footer-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .footer-logo-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #4CAF50;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: #4CAF50;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .site-name {
+                font-size: 18px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            
+            .hero-section {
+                padding: 100px 20px 40px;
+            }
+            
+            .hero-logo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 16px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .hero-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .features-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature-card {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .feature-icon {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* ปรับปรุง UI ของปุ่มควบคุมเสียง */
+        .audio-control {
+            position: relative;
+            margin-left: 15px;
+        }
+
+        .btn-audio {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-audio:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-audio:active {
+            transform: scale(0.95);
+        }
+
+        .btn-audio.muted {
+            background-color: #e74c3c;
+            box-shadow: 0 3px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-audio.muted:hover {
+            box-shadow: 0 5px 12px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-audio i {
+            transition: all 0.3s ease;
+        }
+
+        .btn-audio.muted i::before {
+            content: "\f6a9"; 
+        }
+
+        .sound-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .btn-audio:not(.muted) .sound-wave {
+            animation: sound-wave 1.5s infinite;
+        }
+
+        @keyframes sound-wave {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+                opacity: 1;
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(76, 175, 80, 0);
+                opacity: 0;
+            }
+        }
+
+        .audio-hint {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: white;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            width: 220px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            text-align: left;
+        }
+
+        .audio-control:hover .audio-hint {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .audio-hint p {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .audio-hint p i {
+            color: #4CAF50;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* เพิ่มตัวแสดงระดับเสียง */
+        .volume-indicator {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-audio:not(.muted):hover .volume-indicator {
+            opacity: 1;
+        }
+
+        .volume-level {
+            height: 100%;
+            width: 50%; /* ค่าเริ่มต้น - ของง JavaScript */
+            background-color: white;
+            border-radius: 3px;
+            transition: width 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="images/الأغنية-التى-غيرهم-موازين-رابعة-ابتدائى-ف-المدرسة-v0-r80zjb4ymdie1.webp" alt="Logo">
+            </div>
+            <div class="site-name">โครตเข้าเส้น เล่นเข้าเนื้อ</div>
+        </div>
+        
+        <div class="audio-control">
+            <button id="audioToggle" class="btn-audio">
+                <i class="fas fa-volume-up"></i>
+                <div class="sound-wave"></div>
+                <div class="volume-indicator">
+                    <div class="volume-level" id="volumeLevel"></div>
+                </div>
+            </button>
+            <div class="audio-hint">
+                <p><i class="fas fa-keyboard"></i> กด Space bar เพื่อเล่น/หยุดเพลง</p>
+                <p><i class="fas fa-arrow-up"></i> ปุ่มลูกศรขึ้นเพิ่มระดับเสียง</p>
+                <p><i class="fas fa-arrow-down"></i> ปุ่มลูกศรลงลดระดับเสียง</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <!-- เพิ่มวิดีโอพื้นหลัง -->
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="video/พี่โตเต้นเพลง SEE TINH.mp4" type="video/mp4">
+
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        
+        <div class="hero-logo">
+            <img src="images/الأغنية-التى-غيرهم-موازين-رابعة-ابتدائى-ف-المدرسة-v0-r80zjb4ymdie1.webp" alt="Logo">
+        </div>
+        <h1 class="hero-title">ยินดีต้อนรับสู่ครอบครัว</h1>
+        <p class="hero-subtitle">
+            เข้าร่วมกับเราเพื่อเข้าถึงคอนเทนต์พิเศษ วิดีโอของเหล่าเพื่อนพ้อง
+        </p>
+        <div class="hero-buttons">
+            <button class="hero-btn hero-btn-login" onclick="location.href='login.html'">
+                <i class="fas fa-sign-in-alt"></i> เข้าสู่ระบบ
+            </button>
+            <button class="hero-btn hero-btn-register" onclick="location.href='register.html'">
+                <i class="fas fa-user-plus"></i> สมัครสมาชิกใหม่
+            </button>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title">คุณสมบัติที่ต้องมี น๊ะจ๊ะ</h2>
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="images/Gemini_Generated_Image_mxuol9mxuol9mxuo.jpg" alt="ขาต้องแข็งใจต้องนิ่ง WereWolf สอนมา">
+                </div>
+                <h3 class="feature-title">ขาต้องแข็งใจต้องนิ่ง WereWolf สอนมา</h3>
+                <p class="feature-description">
+                    การที่ขาเราแข็งนั้นจะทำให้เราล้มยากและที่เราต้องมีคือจิตใจที่นิ่งเตรียมพร้อมที่จะทำการใหญ๋
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="images/unnamed.png" alt="ตอบโต้ต้องไว ช้าเกินไปก็ไม่เอา">
+                </div>
+                <h3 class="feature-title">ตอบโต้ต้องไว ช้าเกินไปก็ไม่เอา</h3>
+                <p class="feature-description">
+                    การที่เราตอบโต้ไวนั้นจะทำให้เราได้เปรียบคู่ต่อสู่เสมอ
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="images/6f6e9c23ac4443b45a46e2cf16bcd5d8.jpg" alt="ต้องเบียวจิตวิทยา">
+                </div>
+                <h3 class="feature-title">ต้องเบียวเป็น โยฮันนักจิตวิทยา</h3>
+                <p class="feature-description">
+                    การใช้จิตวิทยานั้นเป็นการสะกดจิตใจผู้อื่นให้สามารถทำตามในสิ่งที่เราต้องการ
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="footer-logo-icon">
+                    <img src="images/الأغنية-التى-غيرهم-موازين-رابعة-ابتدائى-ف-المدرسة-v0-r80zjb4ymdie1.webp" alt="Logo">
+                </div>
+                <div class="footer-logo-text">โครตเข้าเส้น เล่นเข้าเนื้อ</div>
+            </div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">หน้าหลัก</a>
+                <a href="#" class="footer-link">เกี่ยวกับเรา</a>
+                <a href="#" class="footer-link">บริการ</a>
+                <a href="#" class="footer-link">ติดต่อเรา</a>
+                <a href="#" class="footer-link">นโยบายความเป็นส่วนตัว</a>
+                <a href="#" class="footer-link">ข้อกำหนดการใช้งาน</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-line"></i></a>
+            </div>
+            <div class="copyright">
+                &copy; แก้วปิ้งไก่
+            </div>
+        </div>
+    </footer>
+
+    <!-- ให้เพลงวนลูปกับเล่นเอง -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="video/พี่โตเต้นเพลง SEE TINH.mp4" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // ตรวจสอบว่ามีการล็อกอินอยู่ไหม
+        document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        // ถ้ามีการล็อกอินอยู่แล้ว ให้ redirect ไปที่หน้า dashboard
+        window.location.href = 'dashboard.html';
+    }
+    
+    const audioToggle = document.getElementById('audioToggle');
+    const bgMusic = document.getElementById('bgMusic');
+    const volumeLevel = document.getElementById('volumeLevel');
+    let isPlaying = false;
+
+    // ฟังก์ชันสำหรับเล่น/หยุดเพลง
+    function toggleAudio() {
+        if (isPlaying) {
+            bgMusic.pause();
+            audioToggle.classList.add('muted');
+        } else {
+            playAudio();
+        }
+        isPlaying = !isPlaying;
+        updateVolumeIndicator();
+    }
+
+    // ฟังก์ชันสำหรับเล่นเพลง
+    function playAudio() {
+        bgMusic.play().then(() => {
+            audioToggle.classList.remove('muted');
+            isPlaying = true;
+            updateVolumeIndicator();
+        }).catch(error => {
+            console.log('Audio autoplay was prevented:', error);
+            audioToggle.classList.add('muted');
+            isPlaying = false;
+        });
+    }
+
+    // อัปเดตตัวแสดงระดับเสียง
+    function updateVolumeIndicator() {
+        if (volumeLevel) {
+            volumeLevel.style.width = (bgMusic.volume * 100) + '%';
+        }
+    }
+
+    // เพิ่ม event listener สำหรับปุ่มควบคุมเสียง
+    audioToggle.addEventListener('click', toggleAudio);
+
+    // ตั้งค่าระดับเสียงเริ่มต้น
+    bgMusic.volume = 0.5; // ปรับระดับเสียง (0.0 - 1.0)
+    updateVolumeIndicator();
+
+    // เล่นเพลงอัตโนมัติเมื่อโหลดหน้า
+    playAudio();
+
+    // เบราว์เซอร์ที่บล็อกการเล่นอัตโนมัติ ให้เล่นเมื่อมีการโต้ตอบ
+    const userInteractionEvents = ['click', 'touchstart', 'keydown'];
+    
+    function handleUserInteraction() {
+        if (!isPlaying) {
+            playAudio();
+        }
+        // event listeners หลังจากที่ได้รับการโต้ตอบแล้ว
+        userInteractionEvents.forEach(event => {
+            document.removeEventListener(event, handleUserInteraction);
+        });
+    }
+
+    // event listeners สำหรับการโต้ตอบของผู้ใช้
+    userInteractionEvents.forEach(event => {
+        document.addEventListener(event, handleUserInteraction);
+    });
+
+    // จัดการกับการเปลี่ยนแท็บ
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            if (isPlaying) {
+                bgMusic.pause();
+            }
+        } else {
+            if (isPlaying) {
+                bgMusic.play().catch(error => {
+                    console.log('Audio autoplay was prevented:', error);
+                });
+            }
+        }
+    });
+
+    // เพิ่มการควบคุมด่วยคียบอรด
+    document.addEventListener('keydown', function(e) {
+        // Space bar สำหรับเล่นน/หยุดเพลง
+        if (e.code === 'Space') {
+            e.preventDefault(); // ป้องกันการเลื่อนหนา
+            toggleAudio();
+        }
+        
+        // ปุ่มลูกศรสำหรับควบคุมระดับเสียง
+        if (isPlaying) {
+            if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                bgMusic.volume = Math.min(1, bgMusic.volume + 0.1);
+                updateVolumeIndicator();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                bgMusic.volume = Math.max(0, bgMusic.volume - 0.1);
+                updateVolumeIndicator();
+            }
+        }
+    });
+
+    // สถานะปุ่มเมื่อเสียงถูกปิด
+    bgMusic.addEventListener('volumechange', function() {
+        if (bgMusic.volume === 0) {
+            audioToggle.classList.add('muted');
+        } else {
+            audioToggle.classList.remove('muted');
+        }
+        updateVolumeIndicator();
+    });
+
+    // จัดการกับข้อผิดพลาดของเสียง
+    bgMusic.addEventListener('error', function(e) {
+        console.error('Audio error:', e);
+        audioToggle.classList.add('muted');
+        isPlaying = false;
+    });
+});
+    </script>
+</body>
+</html>
