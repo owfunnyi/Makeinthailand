@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // ตรวจสอบรหัสผ่าน
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*_?&])[A-Za-z\d@$!%*_?&]{8,}$/;
         if (!passwordRegex.test(password)) {
             document.getElementById('passwordError').textContent = 'รหัสผ่านไม่ตรงตามข้อกำหนด';
             document.getElementById('passwordError').style.display = 'block';
